@@ -42,6 +42,12 @@ public partial class EasyPassContext : DbContext
 
     public virtual DbSet<ValidationCard> ValidationCards { get; set; }
 
+
+
+
+
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=localhost;Database=EasyPass;Trusted_Connection=True;TrustServerCertificate=true;");
 
