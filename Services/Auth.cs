@@ -31,9 +31,9 @@ namespace Api.Services
                 Subject = new ClaimsIdentity(
                 [
                     new Claim("Id", adm.AdmId.ToString() ?? ""),
-            new Claim("Email", adm.AdmEmail ?? ""),
-            new Claim("Senha", adm.AdmSenha ?? ""),
-            new Claim("Level", adm.AdmLevel.ToString() ?? "")
+                    new Claim("Email", adm.AdmEmail ?? ""),
+                    new Claim("Senha", adm.AdmSenha ?? ""),
+                    new Claim("Level", adm.AdmLevel.ToString() ?? "")
                 ]),
                 Issuer = _issuer,
                 Audience = _audience,

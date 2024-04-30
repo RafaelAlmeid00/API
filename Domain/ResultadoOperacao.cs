@@ -11,8 +11,11 @@ namespace Api.Domain
 
     }
 
+    // separar camadas
+
     public class Link : ILink
-    {        public required string Rel { get; set; }
+    {        
+        public required string Rel { get; set; }
         public required string Href { get; set; }
         public required string Method { get; set; }
     }
