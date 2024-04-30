@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Adapters_Repository
 {
 
-    public class AdminRepository(EasyPassContext context) : IBaseRepository<Admin>, IDeleteEditRepository<IAdminDTO>
+    public class AdminRepository(EasyPassContext context) : IRepositoryAdmin<Admin>
     {
         private readonly EasyPassContext _context = context;
 
@@ -51,16 +51,16 @@ namespace Api.Adapters_Repository
             {
                 await _context.Admins.AddAsync(data);
                 await _context.SaveChangesAsync();
-                IResultadoOperacao<Admin> admin = await GetOne(data);
-                return admin.Data is not null
+                IResultadoOperacao<List<Admin>> admin = await Search(data);
+                return admin?.Data?.Count != 0
                 ? new ResultadoOperacao<Admin>
-                { Data = admin.Data, Sucesso = true, Link = link }
+                { Data = admin?.Data?[0], Sucesso = true, Link = link }
                 : new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Erro ao salvar Admin", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.AdmId) ? new ResultadoOperacao<Admin>
+                return await AdminExistsEmail(data.AdmEmail) ? new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Admin já existe", Link = link }
                 : new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Erro ao salvar Admin", Link = link };
@@ -80,7 +80,7 @@ namespace Api.Adapters_Repository
                 ? new ResultadoOperacao<Admin>
                 { Data = admin, Sucesso = true, Link = link }
                 : new ResultadoOperacao<Admin>
-                { Sucesso = false, Erro = "Erro ao salvar Admin", Link = link };
+                { Sucesso = false, Erro = "Admin não existe", Link = link };
             }
             catch (DbUpdateException)
             {
@@ -91,16 +91,16 @@ namespace Api.Adapters_Repository
             }
         }
 
-        public async Task<IResultadoOperacao<IAdminDTO>> Edit(IAdminDTO data)
+        public async Task<IResultadoOperacao<Admin>> Edit(Admin data)
         {
             ILink link = new Link
             { Rel = "edit_admin", Href = "/Admin", Method = "PUT" };
             try
             {
-                IAdminDTO? adm = await _context.Admins.FindAsync(data.AdmId);
+                Admin? adm = await _context.Admins.FindAsync(data.AdmId);
                 if (adm is not null)
                 {
-                    var properties = typeof(IAdminDTO).GetProperties();
+                    var properties = typeof(Admin).GetProperties();
                     foreach (var property in properties)
                     {
                         if (property.CanWrite)
@@ -114,22 +114,22 @@ namespace Api.Adapters_Repository
                     }
                 }
                 await _context.SaveChangesAsync();
-                IResultadoOperacao<Admin>? admin = await GetOne((Admin)data);
-                return admin.Data is not null
-                ? new ResultadoOperacao<IAdminDTO>
+                IResultadoOperacao<Admin>? admin = (IResultadoOperacao<Admin>?)await GetOne(data);
+                return admin is not null && admin.Data is not null
+                ? new ResultadoOperacao<Admin>
                 { Data = admin.Data, Sucesso = true, Link = link }
-                : new ResultadoOperacao<IAdminDTO>
+                : new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Erro ao editar Admin", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.AdmId) ? new ResultadoOperacao<IAdminDTO>
+                return await AdminExists(data.AdmId) ? new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Erro ao editar Admin", Link = link }
-                : new ResultadoOperacao<IAdminDTO>
+                : new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Admin não existe", Link = link };
             }
         }
-        public async Task<IResultadoOperacao<IAdminDTO>> Delete(IAdminDTO data)
+        public async Task<IResultadoOperacao<Admin>> Delete(Admin data)
         {
             ILink link = new Link
             { Rel = "edit_admin", Href = "/Admin", Method = "PUT" };
@@ -138,25 +138,29 @@ namespace Api.Adapters_Repository
                 Admin? buscaAdmin = await _context.Admins.FindAsync(data.AdmId);
                 if (buscaAdmin == null)
                 {
-                    return new ResultadoOperacao<IAdminDTO> 
+                    return new ResultadoOperacao<Admin> 
                     { Sucesso = false, Erro = "Admin não existe", Link = link };
                 }
                 _context.Admins.Remove(buscaAdmin);
                 await _context.SaveChangesAsync();
-                return new ResultadoOperacao<IAdminDTO> 
+                return new ResultadoOperacao<Admin> 
                 { Data = buscaAdmin, Sucesso = true, Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.AdmId) ? new ResultadoOperacao<IAdminDTO>
+                return await AdminExists(data.AdmId) ? new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Erro ao deletar Admin", Link = link }
-                : new ResultadoOperacao<IAdminDTO>
+                : new ResultadoOperacao<Admin>
                 { Sucesso = false, Erro = "Admin não existe!", Link = link };
             }
         }
         private async Task<bool> AdminExists(int? id)
         {
             return await _context.Admins.AnyAsync(e => e.AdmId == id);
+        }
+        private async Task<bool> AdminExistsEmail(string? email)
+        {
+            return await _context.Admins.AnyAsync(e => e.AdmEmail == email);
         }
     }
 }

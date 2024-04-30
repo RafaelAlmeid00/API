@@ -28,10 +28,10 @@ namespace Api.Interface
     public interface ILoginLogoutService<T>
     {
         Task<IResultadoOperacao<string>> Login(T data);
-        Task<IResultadoOperacao<string>> Logout(T data);
+        IResultadoOperacao<string> Logout(T data);
     }
 
-    public interface IService<T> : IBaseService<T>, IAlterTypeService<T>, IDeleteEditService<T>, IDisableEnableService<T>, ILoginLogoutService<T>
+    public interface IServiceAdmin<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IAdminLoginDTO>
     {
     }
 

@@ -1,10 +1,8 @@
-using Api.Domain;
 using Api.Interface;
 using dotenv.net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Api.Services
@@ -31,10 +29,33 @@ namespace Api.Services
                 Subject = new ClaimsIdentity(
                 [
                     new Claim("Id", adm.AdmId.ToString() ?? ""),
-            new Claim("Email", adm.AdmEmail ?? ""),
-            new Claim("Senha", adm.AdmSenha ?? ""),
-            new Claim("Level", adm.AdmLevel.ToString() ?? "")
+                    new Claim("Email", adm.AdmEmail ?? ""),
+                    new Claim("Senha", adm.AdmSenha ?? ""),
+                    new Claim("Level", adm.AdmLevel.ToString() ?? "")
                 ]),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _issuer,
+                Audience = _audience,
+                SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        public string CreateTokenTemp(IAdminDTO adm)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(
+                [
+                    new Claim("Id", adm.AdmId.ToString() ?? ""),
+                    new Claim("Email", adm.AdmEmail ?? ""),
+                    new Claim("Senha", adm.AdmSenha ?? ""),
+                    new Claim("Level", adm.AdmLevel.ToString() ?? "")
+                ]),
+                Expires = DateTime.UtcNow.AddSeconds(1),
                 Issuer = _issuer,
                 Audience = _audience,
                 SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256)

@@ -1,23 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Api.Domain;
-using Api.Infrastructure;
 using Api.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Adapters_Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController(IService<Admin> service) : ControllerBase
+    public class AdminController(IServiceAdmin<Admin> service) : ControllerBase
     {
-        private readonly IService<Admin> _service = service;
+        private readonly IServiceAdmin<Admin> _service = service;
 
         // GET: api/Admin
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetAdmins([FromBody] Admin admin)
         {
@@ -26,22 +22,33 @@ namespace Api.Adapters_Controllers
         }
 
         // GET: api/Admin/5
+        [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetAdmin([FromBody] Admin admin)
+        public async Task<ActionResult> GetAdmin(int id, [FromBody] Admin admin)
         {
-            IResultadoOperacao<Admin> result = await _service.GetOne(admin);
-            return result.Data is not null ? Ok(result) : BadRequest(result);
+            if (id == admin.AdmId)
+            {
+                IResultadoOperacao<Admin> result = await _service.GetOne(admin);
+                return result.Data is not null ? Ok(result) : BadRequest(result);
+            }
+            return NotFound("Admin não existe");
         }
 
         // PUT: api/Admin/5
-        [HttpPut]
-        public async Task<ActionResult> PutAdmin([FromBody] Admin admin)
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutAdmin(int id, [FromBody] Admin admin)
         {
-            IResultadoOperacao<Admin> result = await _service.Edit(admin);
-            return result.Data is not null ? Ok(result) : BadRequest(result);
+            if (id == admin.AdmId)
+            {
+                IResultadoOperacao<Admin> result = await _service.Edit(admin);
+                return result.Data is not null ? Ok(result) : BadRequest(result);
+            }
+            return NotFound("Admin não existe");
         }
 
         // POST: api/Admin
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> PostAdmin([FromBody] Admin admin)
         {
@@ -49,16 +56,20 @@ namespace Api.Adapters_Controllers
             return result.Data is not null ? Ok(result) : BadRequest(result);
         }
 
-        // DELETE: api/Admin/5
-        [HttpDelete]
-        public async Task<ActionResult> DeleteAdmin([FromBody] Admin admin)
+        // DELETE: api/Admin
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAdmin(int id, [FromBody] Admin admin)
         {
-            IResultadoOperacao<Admin> result = await _service.Delete(admin);
-            return result.Data is not null ? Ok(result) : BadRequest(result);
+            if (id == admin.AdmId)
+            {
+                IResultadoOperacao<Admin> result = await _service.Delete(admin);
+                return result.Data is not null ? Ok(result) : BadRequest(result);
+            }
+            return NotFound("Admin não existe");
         }
-
         [HttpPost("Login")]
-        public async Task<ActionResult> LoginAdmin([FromBody] Admin admin)
+        public async Task<ActionResult> LoginAdmin([FromBody] AdminLogin admin)
         {
             IResultadoOperacao<string> result = await _service.Login(admin);
             if (result.Data is not null)
@@ -67,12 +78,16 @@ namespace Api.Adapters_Controllers
             }
             return result.Data is not null ? Ok(result) : BadRequest(result);
         }
-
+        [Authorize]
         [HttpPost("Logout")]
-        public async Task<ActionResult> LogoutAdmin([FromBody] Admin admin)
+        public Task<ActionResult> LogoutAdmin([FromBody] AdminLogin admin)
         {
-            IResultadoOperacao<string> result = await _service.Logout(admin);
-            return result.Data is not null ? Ok(result) : BadRequest(result);
+            IResultadoOperacao<string> result = _service.Logout(admin);
+            if (result.Data is not null)
+            {
+                HttpContext.Session.SetString("AuthToken", result.Data);
+            }
+            return Task.FromResult<ActionResult>(result.Data is not null ? Ok(result) : BadRequest(result));
         }
     }
 }

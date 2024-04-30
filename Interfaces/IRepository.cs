@@ -30,7 +30,7 @@ namespace Api.Interface
         Task<IResultadoOperacao<T>> Logout(T data);
     }
 
-    public interface IRepository<T> : IBaseRepository<T>, IDeleteEditRepository<T>, IAlterTypeRepository<T>, IDisableEnableRepository<T>, ILoginLogoutRepository<T>
+    public interface IRepositoryAdmin<T> : IBaseRepository<T>, IDeleteEditRepository<T>
     {
     }
 

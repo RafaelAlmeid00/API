@@ -1,6 +1,9 @@
-
 using System.Text;
+using Api.Adapters_Repository;
+using Api.Domain;
 using Api.Infrastructure;
+using Api.Interface;
+using Api.Services;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +35,10 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = _envVariables["issuer"],
         ValidAudience = _envVariables["audience"],
@@ -54,11 +58,12 @@ builder.Services.AddControllers(m =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-/*builder.Services.AddScoped<IAdministradorDTO, Administrador>();
-builder.Services.AddScoped<IRepository, Repository>();
-builder.Services.AddScoped<IService, Service>();
-builder.Services.AddScoped<IAuth, Auth>();
-builder.Services.AddScoped<ICrypto, Crypto>();*/
+builder.Services.AddScoped<IAdminDTO, Admin>();
+builder.Services.AddScoped<IAdminLoginDTO, AdminLogin>();
+builder.Services.AddScoped<IRepositoryAdmin<Admin>, AdminRepository>();
+builder.Services.AddScoped<IServiceAdmin<Admin>, Service>();
+builder.Services.AddScoped<IAuth<IAdminDTO>, Auth>();
+builder.Services.AddScoped<ICrypto, Crypto>();
 
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();

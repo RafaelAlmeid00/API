@@ -19,6 +19,11 @@ public partial class Admin : IAdminDTO
     public string? AdmSenha { get; set; }
     public int? AdmLevel { get; set; }
     public virtual ICollection<SacMessage>? SacMessages { get; set; } = [];
+
+    public static explicit operator Admin(List<Admin> v)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class AdminLogin : IAdminLoginDTO

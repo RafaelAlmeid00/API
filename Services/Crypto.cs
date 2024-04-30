@@ -1,5 +1,4 @@
 using Api.Interface;
-using BCrypt.Net;
 
 namespace Api.Services
 {
