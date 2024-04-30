@@ -23,6 +23,10 @@ namespace Api.Services
             _issuer = _envVariables["issuer"];
             _audience = _envVariables["audience"];
         }
+
+
+        //-----
+
         public string CreateToken(IAdminDTO adm)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -39,6 +43,8 @@ namespace Api.Services
                 Audience = _audience,
                 SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256)
             };
+
+            
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
