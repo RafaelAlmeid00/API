@@ -23,6 +23,10 @@ namespace Api.Services
             _issuer = _envVariables["issuer"];
             _audience = _envVariables["audience"];
         }
+
+
+        //-----
+
         public string CreateToken(IAdminDTO adm)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -31,14 +35,16 @@ namespace Api.Services
                 Subject = new ClaimsIdentity(
                 [
                     new Claim("Id", adm.AdmId.ToString() ?? ""),
-            new Claim("Email", adm.AdmEmail ?? ""),
-            new Claim("Senha", adm.AdmSenha ?? ""),
-            new Claim("Level", adm.AdmLevel.ToString() ?? "")
+                    new Claim("Email", adm.AdmEmail ?? ""),
+                    new Claim("Senha", adm.AdmSenha ?? ""),
+                    new Claim("Level", adm.AdmLevel.ToString() ?? "")
                 ]),
                 Issuer = _issuer,
                 Audience = _audience,
                 SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256)
             };
+
+            
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
