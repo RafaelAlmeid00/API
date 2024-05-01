@@ -4,10 +4,11 @@ using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Antiforgery;
 using Newtonsoft.Json;
-
+using Microsoft.AspNetCore.Http;
 
 namespace Api.Adapters_Controllers
 {
+    using Microsoft.AspNetCore.Http;
 
     [Route("api/[controller]")]
     [ApiController]
