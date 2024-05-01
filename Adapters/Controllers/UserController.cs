@@ -4,11 +4,9 @@ using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Antiforgery;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
 
 namespace Api.Adapters_Controllers
 {
-    using Microsoft.AspNetCore.Http;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -83,7 +81,8 @@ namespace Api.Adapters_Controllers
                 string? tokenCsrf = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
                 Response.Headers["X-CSRF-TOKEN"] = tokenCsrf;
                 HttpContext.Response.Headers.Authorization = "Bearer " + result.Data?.Token;
-                HttpContext.Session.SetString("AuthToken", JsonConvert.SerializeObject(result.Data.Token));
+                string token = result.Data.Token;
+                HttpContext.Session.SetString("AuthToken", token);
             }
             return result.Data?.Token is not null ? Ok(result.Data.User) : BadRequest(result);
         }
