@@ -82,9 +82,13 @@ namespace Api.Adapters_Controllers
                 string? tokenCsrf = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
                 Response.Headers["X-CSRF-TOKEN"] = tokenCsrf;
                 HttpContext.Response.Headers.Authorization = "Bearer " + result.Data?.Token;
-                HttpContext.Session.SetString("AuthToken", result.Data.Token);
+                if (HttpContext != null && HttpContext.Session != null)
+                {
+                    HttpContext.Session.SetString("AuthToken", result.Data.Token);
+                    return Ok(result.Data.User);
+                }
             }
-            return result.Data?.Token is not null ? Ok(result.Data.User) : BadRequest(result);
+            return BadRequest(result);
         }
         [Authorize]
         [ValidateAntiForgeryToken]

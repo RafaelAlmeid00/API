@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SnapObjects.Data.AspNetCore;
+using Microsoft.AspNetCore.Http;
 
 DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
 
@@ -48,8 +49,6 @@ builder.Services.AddAuthentication(options =>
     options.SaveToken = true;
     options.Audience = _envVariables["audience"];
 });
-
-
 
 builder.Services.AddControllers(m =>
 {
