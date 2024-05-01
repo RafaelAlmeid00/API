@@ -29,7 +29,6 @@ namespace Api.Interface
     public interface ILoginLogoutService<T>
     {
         Task<IResultadoOperacao<object>> Login(T data);
-        IResultadoOperacao<string> Logout(T data);
     }
 
     public interface IServiceAdmin<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IAdminLoginDTO>

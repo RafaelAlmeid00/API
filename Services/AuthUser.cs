@@ -15,7 +15,7 @@ namespace Api.Services
             {
                 Subject = new ClaimsIdentity(
                 [
-                    new Claim("CPF", data.UserCpf ?? ""),
+                    new Claim("UserCPF", data.UserCpf ?? ""),
                     new Claim("Email", data.UserEmail ?? ""),
                     new Claim("Senha", data.UserSenha ?? ""),
                     new Claim("RG", data.UserRg ?? ""),
@@ -24,14 +24,14 @@ namespace Api.Services
                     new Claim("FotoPerfil", data.UserFotoPerfil?.ToString() ?? ""),
                     new Claim("RGFrente", data.UserRgfrente?.ToString() ?? ""),
                     new Claim("RGTras", data.UserRgtras?.ToString() ?? ""),
-                    new Claim("Tipo", data.UserTipo.ToString() ?? ""),
-                    new Claim("EndCep", data.UserEndCep.ToString() ?? ""),
-                    new Claim("EndUf", data.UserEndUf.ToString() ?? ""),
-                    new Claim("Endbairro", data.UserEndbairro.ToString() ?? ""),
-                    new Claim("Endrua", data.UserEndrua.ToString() ?? ""),
-                    new Claim("Endnum", data.UserEndnum.ToString() ?? ""),
-                    new Claim("EndCidade", data.UserEndcidade.ToString() ?? ""),
-                    new Claim("Tipo", data.UserTipo.ToString() ?? "")
+                    new Claim("Tipo", data.UserTipo?.ToString() ?? ""),
+                    new Claim("EndCep", data.UserEndCep?.ToString() ?? ""),
+                    new Claim("EndUf", data.UserEndUf?.ToString() ?? ""),
+                    new Claim("Endbairro", data.UserEndbairro?.ToString() ?? ""),
+                    new Claim("Endrua", data.UserEndrua?.ToString() ?? ""),
+                    new Claim("Endnum", data.UserEndnum?.ToString() ?? ""),
+                    new Claim("EndCidade", data.UserEndcidade?.ToString() ?? ""),
+                    new Claim("Status", data.UserStatus?.ToString() ?? "")
                 ]),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _issuer,

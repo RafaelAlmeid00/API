@@ -2,14 +2,16 @@ using Microsoft.AspNetCore.Mvc;
 using Api.Domain;
 using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace Api.Adapters_Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController(IServiceAdmin<Admin> service) : ControllerBase
+    public class AdminController(IServiceAdmin<Admin> service, IAntiforgery antiforgery) : ControllerBase
     {
         private readonly IServiceAdmin<Admin> _service = service;
+        private readonly IAntiforgery _antiforgery = antiforgery;
 
         // GET: api/Admin
         [Authorize]
@@ -35,6 +37,7 @@ namespace Api.Adapters_Controllers
 
         // PUT: api/Admin/5
         [Authorize]
+        [ValidateAntiForgeryToken]
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAdmin(int id, [FromBody] Admin data)
         {
@@ -48,6 +51,7 @@ namespace Api.Adapters_Controllers
 
         // POST: api/Admin
         [Authorize]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<ActionResult> PostAdmin([FromBody] Admin data)
         {
@@ -57,6 +61,7 @@ namespace Api.Adapters_Controllers
 
         // DELETE: api/Admin
         [Authorize]
+        [ValidateAntiForgeryToken]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAdmin(int id, [FromBody] Admin data)
         {
@@ -73,17 +78,27 @@ namespace Api.Adapters_Controllers
             IResultadoOperacao<dynamic> result = await _service.Login(data);
             if (result.Sucesso)
             {
-                HttpContext.Response.Headers.Append("Authorization", result.Data.Token);
+                string? tokenCsrf = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+                Response.Headers["X-CSRF-TOKEN"] = tokenCsrf;
+                HttpContext.Response.Headers.Authorization = "Bearer " + result.Data?.Token;
                 HttpContext.Session.SetString("AuthToken", result.Data.Token);
             }
-            return result.Data?.Token is not null ? Ok(result.Data.Admin) : BadRequest(result);
+            return result.Data?.Token is not null ? Ok(result.Data.User) : BadRequest(result);
         }
         [Authorize]
+        [ValidateAntiForgeryToken]
         [HttpPost("Logout")]
         public Task<ActionResult> LogoutAdmin([FromBody] AdminLogin data)
         {
-            IResultadoOperacao<string> result = _service.Logout(data);
-            return Task.FromResult<ActionResult>(result.Sucesso ? Ok(result) : BadRequest(result));
+            ILink link = new Link { Rel = "logout_Admin", Href = "/Admin/Logout", Method = "POST" };
+            string? token = HttpContext.Session.GetString("AuthToken");
+            return Task.FromResult<ActionResult>(
+                token is not null ? Ok(
+                new ResultadoOperacao<string>
+                { Sucesso = true, Link = link })
+                : BadRequest(
+                new ResultadoOperacao<string>
+                { Sucesso = false, Erro = "Token não encontrado", Link = link }));
         }
     }
 }

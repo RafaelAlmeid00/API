@@ -74,7 +74,8 @@ namespace Api.Services
                 if (compare)
                 {
                     string token = _Auth.CreateTokenUser(search.Data[0]);
-                    object result = new {
+                    object result = new
+                    {
                         Token = token,
                         User = search.Data[0]
                     };
@@ -86,20 +87,6 @@ namespace Api.Services
             }
             return new ResultadoOperacao<object>
             { Sucesso = false, Erro = "Email ou Senha Incorreta", Link = link };
-        }
-
-        public IResultadoOperacao<string> Logout(IUserLoginDTO data)
-        {
-            ILink link = new Link { Rel = "logout_admin", Href = "/User/Logout", Method = "POST" };
-
-            string? token = _httpContextAccessor.HttpContext?.Session.GetString("AuthToken");
-
-            if (token is not null)
-            {
-                _httpContextAccessor?.HttpContext?.Session.Clear();
-                return new ResultadoOperacao<string> { Sucesso = true, Link = link };
-            }
-            return new ResultadoOperacao<string> { Sucesso = false, Erro = "Token não encontrado", Link = link };
         }
 
         public async Task<IResultadoOperacao<List<User>>> Search(User data)

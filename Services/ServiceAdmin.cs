@@ -73,20 +73,6 @@ namespace Api.Services
             { Sucesso = false, Erro = "Email ou Senha Incorreta", Link = link };
         }
 
-        public IResultadoOperacao<string> Logout(IAdminLoginDTO data)
-        {
-            ILink link = new Link { Rel = "logout_admin", Href = "/Admin/Logout", Method = "POST" };
-
-            string? token = _httpContextAccessor.HttpContext?.Session.GetString("AuthToken");
-
-            if (token is not null)
-            {
-                _httpContextAccessor?.HttpContext?.Session.Clear();
-                return new ResultadoOperacao<string> { Sucesso = true, Link = link };
-            }
-            return new ResultadoOperacao<string> { Sucesso = false, Erro = "Token não encontrado", Link = link };
-        }
-
         public async Task<IResultadoOperacao<List<Admin>>> Search(Admin data)
         {
             return await _Repository.Search(data);

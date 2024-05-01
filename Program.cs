@@ -74,6 +74,11 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 app.UseSession();
+app.Use(async (context, next) =>
+{
+    context.Session.SetString("AuthToken", "seu_token_jwt");
+    await next();
+});
 
 if (app.Environment.IsDevelopment())
 {
