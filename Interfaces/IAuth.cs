@@ -1,9 +1,10 @@
 
 namespace Api.Interface
 {
-    public interface IAuth<T>
+    public interface IAuth
     {
-        string CreateToken(T data);
-        string CreateTokenTemp(T data);
+        string CreateTokenAdmin(IAdminDTO data);
+        string CreateTokenUser(IUserDTO data);
     }
+
 }

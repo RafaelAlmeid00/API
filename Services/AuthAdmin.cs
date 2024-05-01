@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Api.Services
 {
-    public class Auth : IAuth<IAdminDTO>
+    public partial class Auth : IAuth
     {
         private readonly SymmetricSecurityKey _signingKey;
         private readonly string _issuer;
@@ -22,10 +22,7 @@ namespace Api.Services
             _audience = _envVariables["audience"];
         }
 
-
-        //-----
-
-        public string CreateToken(IAdminDTO adm)
+        public string CreateTokenAdmin(IAdminDTO adm)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -47,28 +44,5 @@ namespace Api.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public string CreateTokenTemp(IAdminDTO adm)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(
-                [
-                    new Claim("Id", adm.AdmId.ToString() ?? ""),
-                    new Claim("Email", adm.AdmEmail ?? ""),
-                    new Claim("Senha", adm.AdmSenha ?? ""),
-                    new Claim("Level", adm.AdmLevel.ToString() ?? "")
-                ]),
-                Expires = DateTime.UtcNow.AddSeconds(1),
-                Issuer = _issuer,
-                Audience = _audience,
-                SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256)
-            };
-
-            
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
     }
 }

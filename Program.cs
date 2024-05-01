@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SnapObjects.Data.AspNetCore;
 
-//DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
+DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
 
 var builder = WebApplication.CreateBuilder(args);
 var _envVariables = DotEnv.Read();
@@ -61,8 +61,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAdminDTO, Admin>();
 builder.Services.AddScoped<IAdminLoginDTO, AdminLogin>();
 builder.Services.AddScoped<IRepositoryAdmin<Admin>, AdminRepository>();
-builder.Services.AddScoped<IServiceAdmin<Admin>, Service>();
-builder.Services.AddScoped<IAuth<IAdminDTO>, Auth>();
+builder.Services.AddScoped<IServiceAdmin<Admin>, ServiceAdmin>();
+builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<ICrypto, Crypto>();
 
 builder.Services.AddMvc();

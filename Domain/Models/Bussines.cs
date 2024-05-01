@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Api.Interface;
 
 namespace Api.Domain;
 
-public partial class Bussines
+public partial class Bussines : IBussinesDTO
 {
     public string BussCnpj { get; set; } = null!;
 

@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Api.Services
 {
-    public class Service(IRepositoryAdmin<Admin> Repository, ICrypto Crypto, IAuth<IAdminDTO> Auth, IHttpContextAccessor httpContextAccessor) : IServiceAdmin<Admin>
+    public class ServiceAdmin(IRepositoryAdmin<Admin> Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceAdmin<Admin>
     {
         private readonly IRepositoryAdmin<Admin> _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
-        private readonly IAuth<IAdminDTO> _Auth = Auth;
+        private readonly IAuth _Auth = Auth;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<IResultadoOperacao<Admin>> Create(Admin data)
@@ -45,7 +45,7 @@ namespace Api.Services
             return await _Repository.GetOne(data);
         }
 
-        public async Task<IResultadoOperacao<string>> Login(IAdminLoginDTO data)
+        public async Task<IResultadoOperacao<object>> Login(IAdminLoginDTO data)
         {
             ILink link = new Link { Rel = "login_admin", Href = "/Admin/Login", Method = "POST" };
             Admin? admin = new()
@@ -58,14 +58,18 @@ namespace Api.Services
                 bool compare = _Crypto.Decrypt(data.AdmSenha, search.Data[0].AdmSenha ?? "");
                 if (compare)
                 {
-                    string token = _Auth.CreateToken(search.Data[0]);
-                    return new ResultadoOperacao<string>
-                    { Data = token, Sucesso = true, Link = link };
+                    string token = _Auth.CreateTokenAdmin(search.Data[0]);
+                    object result = new {
+                        Token = token,
+                        Admin = search.Data[0]
+                    };
+                    return new ResultadoOperacao<object>
+                    { Data = result, Sucesso = true, Link = link };
                 }
-                return new ResultadoOperacao<string>
+                return new ResultadoOperacao<object>
                 { Sucesso = false, Erro = "Email ou Senha Incorreta", Link = link };
             }
-            return new ResultadoOperacao<string>
+            return new ResultadoOperacao<object>
             { Sucesso = false, Erro = "Email ou Senha Incorreta", Link = link };
         }
 
@@ -77,16 +81,8 @@ namespace Api.Services
 
             if (token is not null)
             {
-                Admin admin = new()
-                {
-                    AdmNome = "temp",
-                    AdmEmail = data.AdmEmail,
-                    AdmSenha = data.AdmSenha,
-                    AdmLevel = 1
-                };
-                string tokentemp = _Auth.CreateTokenTemp(admin);
                 _httpContextAccessor?.HttpContext?.Session.Clear();
-                return new ResultadoOperacao<string> { Data = tokentemp, Sucesso = true, Link = link };
+                return new ResultadoOperacao<string> { Sucesso = true, Link = link };
             }
             return new ResultadoOperacao<string> { Sucesso = false, Erro = "Token não encontrado", Link = link };
         }

@@ -1,4 +1,5 @@
 using Api.Domain;
+using NuGet.Common;
 
 namespace Api.Interface
 {
@@ -27,7 +28,7 @@ namespace Api.Interface
 
     public interface ILoginLogoutService<T>
     {
-        Task<IResultadoOperacao<string>> Login(T data);
+        Task<IResultadoOperacao<object>> Login(T data);
         IResultadoOperacao<string> Logout(T data);
     }
 
@@ -35,5 +36,8 @@ namespace Api.Interface
     {
     }
 
+    public interface IServiceUser<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IUserLoginDTO>, IAlterTypeService<T>, IDisableEnableService<T>
+    {
+    }
 
 }

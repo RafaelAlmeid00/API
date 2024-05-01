@@ -33,7 +33,8 @@ namespace Api.Interface
     public interface IRepositoryAdmin<T> : IBaseRepository<T>, IDeleteEditRepository<T>
     {
     }
-
-
+    public interface IRepositoryUser<T> : IBaseRepository<T>, IDeleteEditRepository<T>, IDisableEnableRepository<T>, IAlterTypeRepository<T>
+    {
+    }
 
 }
