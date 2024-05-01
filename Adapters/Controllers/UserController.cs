@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Antiforgery;
 
 namespace Api.Adapters_Controllers
 {
+    using Microsoft.AspNetCore.Http;
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController(IServiceUser<User> service, IAntiforgery antiforgery) : ControllerBase
