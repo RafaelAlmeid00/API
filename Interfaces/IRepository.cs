@@ -37,4 +37,8 @@ namespace Api.Interface
     {
     }
 
+    public interface IRepositoryBussines<T> : IBaseRepository<T>, IDeleteEditRepository<T>, IDisableEnableRepository<T>, IAlterTypeRepository<T>
+    {
+    }
+
 }

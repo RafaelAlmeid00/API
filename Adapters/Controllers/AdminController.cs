@@ -3,7 +3,6 @@ using Api.Domain;
 using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Antiforgery;
-using Newtonsoft.Json;
 
 namespace Api.Adapters_Controllers
 {

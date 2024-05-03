@@ -39,4 +39,9 @@ namespace Api.Interface
     {
     }
 
+    public interface IServiceBussines<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IBussinesLoginDTO>, IAlterTypeService<T>, IDisableEnableService<T>
+    {
+    }
+
+
 }

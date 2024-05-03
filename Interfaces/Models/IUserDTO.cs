@@ -5,8 +5,10 @@ namespace Api.Interface
 {
     public interface IUserDTO
     {
+        [Key]
+        [MaxLength(11)]
         string? UserCpf { get; set; }
-
+        [MaxLength(9)]
         string? UserRg { get; set; }
 
         string? UserNome { get; set; }

@@ -232,6 +232,10 @@ public partial class EasyPassContext : DbContext
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("buss_endcidade");
+            entity.Property(e => e.BussEndbairro)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasColumnName("buss_endbairro");
             entity.Property(e => e.BussEndcomplemento)
                 .HasMaxLength(45)
                 .IsUnicode(false)
@@ -257,6 +261,10 @@ public partial class EasyPassContext : DbContext
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .HasColumnName("buss_tipo");
+            entity.Property(e => e.BussStatus)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .HasColumnName("buss_status");
         });
 
         modelBuilder.Entity<Card>(entity =>
@@ -513,9 +521,13 @@ public partial class EasyPassContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("user_senha");
             entity.Property(e => e.UserTipo)
-                .HasMaxLength(1)
+                .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("user_tipo");
+            entity.Property(e => e.UserStatus)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasColumnName("user_status");
 
             entity.HasOne(d => d.ListCpfList).WithMany(p => p.Users)
                 .HasForeignKey(d => d.ListCpfListId)

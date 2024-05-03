@@ -5,6 +5,7 @@ namespace Api.Interface
     {
         string CreateTokenAdmin(IAdminDTO data);
         string CreateTokenUser(IUserDTO data);
+        string CreateTokenBussines(IBussinesDTO data);
     }
 
 }
