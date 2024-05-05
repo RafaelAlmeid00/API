@@ -3,7 +3,6 @@ using Api.Domain;
 using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Antiforgery;
-using Newtonsoft.Json;
 
 namespace Api.Adapters_Controllers
 {
@@ -17,6 +16,7 @@ namespace Api.Adapters_Controllers
 
         // GET: api/User
         [Authorize]
+        [RequireAntiforgeryToken]
         [HttpGet]
         public async Task<ActionResult> GetUsers([FromBody] User data)
         {
@@ -26,6 +26,7 @@ namespace Api.Adapters_Controllers
 
         // GET: api/User/5
         [Authorize]
+        [RequireAntiforgeryToken]
         [HttpGet("{cpf}")]
         public async Task<ActionResult> GetUser(string cpf, [FromBody] User data)
         {
@@ -39,7 +40,7 @@ namespace Api.Adapters_Controllers
 
         // PUT: api/User/5
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpPut("{cpf}")]
         public async Task<ActionResult> PutUser(string cpf, [FromBody] User data)
         {
@@ -52,6 +53,8 @@ namespace Api.Adapters_Controllers
         }
 
         // POST: api/User
+        [Authorize]
+        [RequireAntiforgeryToken]
         [HttpPost]
         public async Task<ActionResult> PostUser([FromBody] User data)
         {
@@ -61,7 +64,7 @@ namespace Api.Adapters_Controllers
 
         // DELETE: api/User
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpDelete("{cpf}")]
         public async Task<ActionResult> DeleteUser(string cpf, [FromBody] User data)
         {
@@ -72,8 +75,9 @@ namespace Api.Adapters_Controllers
             }
             return NotFound("User não existe");
         }
+
         [HttpPost("Login")]
-        public async Task<ActionResult> LoginUser([FromBody] IUserLoginDTO data)
+        public async Task<ActionResult> LoginUser([FromBody] UserLogin data)
         {
             IResultadoOperacao<dynamic> result = await _service.Login(data);
             if (result.Sucesso)
@@ -83,18 +87,21 @@ namespace Api.Adapters_Controllers
                 HttpContext.Response.Headers.Authorization = "Bearer " + result.Data?.Token;
                 string token = result.Data.Token;
                 HttpContext.Session.SetString("AuthToken", token);
+                HttpContext.Session.SetString("X-CSRF-TOKEN", tokenCsrf);
             }
             return result.Data?.Token is not null ? Ok(result.Data.User) : BadRequest(result);
         }
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpPost("Logout")]
-        public Task<ActionResult> LogoutUser([FromBody] IUserLoginDTO data)
+        public Task<ActionResult> LogoutUser()
         {
             ILink link = new Link { Rel = "logout_user", Href = "/User/Logout", Method = "POST" };
             string? token = HttpContext.Session.GetString("AuthToken");
+            string? tokenCsrf = HttpContext.Session.GetString("X-CSRF-TOKEN");
             return Task.FromResult<ActionResult>(
-                token is not null ? Ok(
+                token is not null &&
+                tokenCsrf is not null ? Ok(
                 new ResultadoOperacao<string>
                 { Sucesso = true, Link = link })
                 : BadRequest(
@@ -103,30 +110,42 @@ namespace Api.Adapters_Controllers
         }
 
         [Authorize]
-        [ValidateAntiForgeryToken]
-        [HttpPost("Enable")]
-        public async Task<ActionResult> EnableUser([FromBody] User data)
+        [RequireAntiforgeryToken]
+        [HttpPatch("Enable/{cpf}")]
+        public async Task<ActionResult> EnableUser(string cpf, [FromBody] User data)
         {
-            IResultadoOperacao<User> result = await _service.Enable(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            if (cpf == data.UserCpf)
+            {
+                IResultadoOperacao<User> result = await _service.Enable(data);
+                return result.Sucesso ? Ok(result) : BadRequest(result);
+            }
+            return NotFound("User não existe");
         }
 
         [Authorize]
-        [ValidateAntiForgeryToken]
-        [HttpPost("Disable")]
-        public async Task<ActionResult> DisableUser([FromBody] User data)
+        [RequireAntiforgeryToken]
+        [HttpPatch("Disable/{cpf}")]
+        public async Task<ActionResult> DisableUser(string cpf, [FromBody] User data)
         {
-            IResultadoOperacao<User> result = await _service.Disable(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            if (cpf == data.UserCpf)
+            {
+                IResultadoOperacao<User> result = await _service.Disable(data);
+                return result.Sucesso ? Ok(result) : BadRequest(result);
+            }
+            return NotFound("User não existe");
         }
 
         [Authorize]
-        [ValidateAntiForgeryToken]
-        [HttpPost("AlterType")]
-        public async Task<ActionResult> AlterTypeUser([FromBody] User data)
+        [RequireAntiforgeryToken]
+        [HttpPatch("AlterType/{cpf}")]
+        public async Task<ActionResult> AlterTypeUser(string cpf, [FromBody] User data)
         {
-            IResultadoOperacao<User> result = await _service.AlterType(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            if (cpf == data.UserCpf)
+            {
+                IResultadoOperacao<User> result = await _service.AlterType(data);
+                return result.Sucesso ? Ok(result) : BadRequest(result);
+            }
+            return NotFound("User não existe");
         }
     }
 }

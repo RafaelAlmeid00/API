@@ -15,6 +15,7 @@ namespace Api.Adapters_Controllers
 
         // GET: api/Admin
         [Authorize]
+        [RequireAntiforgeryToken]
         [HttpGet]
         public async Task<ActionResult> GetAdmins([FromBody] Admin data)
         {
@@ -24,6 +25,7 @@ namespace Api.Adapters_Controllers
 
         // GET: api/Admin/5
         [Authorize]
+        [RequireAntiforgeryToken]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetAdmin(int id, [FromBody] Admin data)
         {
@@ -37,7 +39,7 @@ namespace Api.Adapters_Controllers
 
         // PUT: api/Admin/5
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAdmin(int id, [FromBody] Admin data)
         {
@@ -51,7 +53,7 @@ namespace Api.Adapters_Controllers
 
         // POST: api/Admin
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpPost]
         public async Task<ActionResult> PostAdmin([FromBody] Admin data)
         {
@@ -61,7 +63,7 @@ namespace Api.Adapters_Controllers
 
         // DELETE: api/Admin
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAdmin(int id, [FromBody] Admin data)
         {
@@ -83,18 +85,21 @@ namespace Api.Adapters_Controllers
                 HttpContext.Response.Headers.Authorization = "Bearer " + result.Data?.Token;
                 string token = result.Data.Token;
                 HttpContext.Session.SetString("AuthToken", token);
+                HttpContext.Session.SetString("X-CSRF-TOKEN", tokenCsrf);
             }
-            return result.Data?.Token is not null ? Ok(result.Data.User) : BadRequest(result);
+            return result.Data?.Token is not null ? Ok(result.Data.Admin) : BadRequest(result);
         }
         [Authorize]
-        [ValidateAntiForgeryToken]
+        [RequireAntiforgeryToken]
         [HttpPost("Logout")]
-        public Task<ActionResult> LogoutAdmin([FromBody] AdminLogin data)
+        public Task<ActionResult> LogoutAdmin()
         {
             ILink link = new Link { Rel = "logout_Admin", Href = "/Admin/Logout", Method = "POST" };
             string? token = HttpContext.Session.GetString("AuthToken");
+            string? tokenCsrf = HttpContext.Session.GetString("X-CSRF-TOKEN");
             return Task.FromResult<ActionResult>(
-                token is not null ? Ok(
+                token is not null &&
+                tokenCsrf is not null ? Ok(
                 new ResultadoOperacao<string>
                 { Sucesso = true, Link = link })
                 : BadRequest(

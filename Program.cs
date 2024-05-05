@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SnapObjects.Data.AspNetCore;
-using Microsoft.AspNetCore.Http;
 
 DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
 
@@ -19,6 +18,13 @@ var _envVariables = DotEnv.Read();
 builder.Services.AddDbContext<EasyPassContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(_envVariables["connectionString"])));
 
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+});
+
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "session";
@@ -54,6 +60,7 @@ builder.Services.AddControllers(m =>
 {
     m.UseCoreIntegrated();
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -77,11 +84,15 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 app.UseSession();
-app.Use(async (context, next) =>
-{
-    context.Session.SetString("AuthToken", "seu_token_jwt");
-    await next();
-});
+app.Use(async (ctx, next) =>
+        {
+            string tokensCSRF = ctx.Request.Cookies["CSRF-TOKEN"];
+            if (string.IsNullOrEmpty(tokensCSRF) == false)
+            {
+                ctx.Request.Headers["X-CSRF-TOKEN"] = tokensCSRF;
+            }
+            await next();
+        });
 
 if (app.Environment.IsDevelopment())
 {
@@ -89,11 +100,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseMiddleware<AuthorizationMiddleware>();
-app.UseHttpsRedirection();
+app.UseMiddleware<AuthorizationMiddleware>();
 
-app.MapControllers();
+app.MapDefaultControllerRoute();
 
 app.Run();

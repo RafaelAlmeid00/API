@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Api.Services
 {
-    public class ServiceUser(IRepositoryUser<User> Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceUser<User>
+    public class ServiceUser(IRepositoryUser<User> Repository, ICrypto Crypto, IAuth Auth) : IServiceUser<User>
     {
         private readonly IRepositoryUser<User> _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
         private readonly IAuth _Auth = Auth;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<IResultadoOperacao<User>> AlterType(User data)
         {
@@ -62,12 +61,12 @@ namespace Api.Services
 
         public async Task<IResultadoOperacao<object>> Login(IUserLoginDTO data)
         {
-            ILink link = new Link { Rel = "login_admin", Href = "/User/Login", Method = "POST" };
-            User? admin = new()
+            ILink link = new Link { Rel = "login_user", Href = "/User/Login", Method = "POST" };
+            User? user = new()
             {
                 UserCpf = data.UserCpf
             };
-            IResultadoOperacao<List<User>> search = await Search(admin);
+            IResultadoOperacao<List<User>> search = await Search(user);
             if (search.Data is not null && search.Data[0] is not null && !string.IsNullOrEmpty(data.UserSenha))
             {
                 bool compare = _Crypto.Decrypt(data.UserSenha, search.Data[0].UserSenha ?? "");

@@ -50,7 +50,6 @@ namespace Api.Interface
     {
         [Key]
         [MaxLength(11, ErrorMessage = "CPF não pode ter mais que 11 dígitos")]
-        [MinLength(11, ErrorMessage = "CPF não pode ter menos que 11 dígitos")]
         string UserCpf { get; set; }
         [PasswordPropertyText]
         string UserSenha { get; set; }

@@ -9,11 +9,9 @@ namespace Api.Domain;
 public partial class User : IUserDTO
 {
     [Key]
-    [MaxLength(11, ErrorMessage = "CPF não pode ter mais que 11 dígitos")]
     [MinLength(11, ErrorMessage = "CPF não pode ter menos que 11 dígitos")]
     public string? UserCpf { get; set; }
-    [MaxLength(9, ErrorMessage = "RG não pode ter mais que 11 dígitos")]
-    [MinLength(9, ErrorMessage = "RG não pode ter menos que 11 dígitos")]
+    [MinLength(9, ErrorMessage = "RG não pode ter menos que 9 dígitos")]
     public string? UserRg { get; set; }
     public string? UserNome { get; set; }
     [EmailAddress]
@@ -38,7 +36,6 @@ public partial class User : IUserDTO
     public string? UserEndcidade { get; set; }
     public string? UserTipo { get; set; }
     public int? ListCpfListId { get; set; }
-    [ForeignKey("ListCPF")]
     public virtual ListCpf? ListCpfList { get; set; }
     public string? UserStatus { get; set; }
 
@@ -53,7 +50,6 @@ public class UserLogin : IUserLoginDTO
 {
     [Key]
     [MaxLength(11, ErrorMessage = "CPF não pode ter mais que 11 dígitos")]
-    [MinLength(11, ErrorMessage = "CPF não pode ter menos que 11 dígitos")]
     public required string UserCpf { get; set; }
     [PasswordPropertyText]
     public required string UserSenha { get; set; }
