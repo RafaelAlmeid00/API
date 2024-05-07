@@ -23,6 +23,20 @@ namespace Api.Adapters_Controllers
             IResultadoOperacao<List<User>> result = await _service.Search(data);
             return result.Sucesso ? Ok(result) : BadRequest(result);
         }
+        
+        // GET: api/User/GeneratePDF
+        // [Authorize]
+        // [RequireAntiforgeryToken]
+        // [HttpGet("GeneratePDF")]
+        // [ProducesResponseType(StatusCodes.Status200OK)]
+        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        // public async Task<IActionResult> GeneratePDF([FromBody] User data)
+        // {
+        //     var userData = await _service.GetUserPDFData(data);
+        //     var pdfBytes = GeneratePDFUsingReportBuilder(userData);
+        //     return File(pdfBytes);
+        // }
+
 
         // GET: api/User/5
         [Authorize]
