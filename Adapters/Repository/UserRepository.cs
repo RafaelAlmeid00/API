@@ -83,7 +83,15 @@ namespace Api.Adapters_Repository
                 { Sucesso = false, Erro = "Erro ao salvar User", Link = link };
             }
         }
-
+        
+        // public byte[] GeneratePDFUsingReportBuilder(User userData)
+        // {
+        //     var report = new ReportBuilder();
+        //     report.AddSection("Informações do Usuário");
+        //     report.AddParagraph($"Nome: {userData.Name}");
+        //     report.AddParagraph($"Email: {userData.Email}");
+        //     return report.RenderPDF();
+        // }
 
         public async Task<IResultadoOperacao<User>> GetOne(User data)
         {
