@@ -6,12 +6,12 @@ namespace Api.Services
     {
         public string Encrypt(string password)
         {
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
             return passwordHash;
         }
         public bool Decrypt(string password, string hash)
         {
-            var verifyPassword = BCrypt.Net.BCrypt.Verify(password, hash);
+            bool verifyPassword = BCrypt.Net.BCrypt.Verify(password, hash);
             return verifyPassword;
         }
     }

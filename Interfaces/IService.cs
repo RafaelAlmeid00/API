@@ -42,6 +42,8 @@ namespace Api.Interface
     public interface IServiceBussines : IBaseService<Bussines>, IDeleteEditService<Bussines>, ILoginLogoutService<IBussinesLoginDTO>, IAlterTypeService<Bussines>, IDisableEnableService<Bussines>
     {
     }
-
+    public interface IServiceListCpf : IBaseService<Bussines>, IDeleteEditService<Bussines>, ILoginLogoutService<IBussinesLoginDTO>, IAlterTypeService<Bussines>, IDisableEnableService<Bussines>
+    {
+    }
 
 }

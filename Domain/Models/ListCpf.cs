@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public record ListCpf
+public record ListCpf : IListCpf
 {
     public int ListId { get; set; }
 

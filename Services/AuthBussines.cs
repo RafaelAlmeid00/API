@@ -10,8 +10,8 @@ namespace Api.Services
 
         public string CreateTokenBussines(IBussinesDTO data)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
+            JwtSecurityTokenHandler tokenHandler = new();
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(
                 [
