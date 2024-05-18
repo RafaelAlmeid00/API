@@ -39,6 +39,14 @@ public class AuthorizationMiddleware(RequestDelegate next)
                     return;
                 }
 
+                if (context.Request.Path.StartsWithSegments("/api/ListCpf") && BussinesClaim is null && AdminClaim is null && context.Request.Method != "GET")
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await WriteUnauthorizedResponse(context);
+                    Console.WriteLine("parada 0");
+                    return;
+                }
+
                 Console.WriteLine("parada 1");
                 if (context.Request.Path.StartsWithSegments("/api/Bussines")
                     && (context.Request.Path != "/api/Bussines/Login"
