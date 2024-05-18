@@ -20,7 +20,7 @@ namespace Api.Adapters_Controllers
         public async Task<ActionResult> GetAdmins([FromBody] Admin data)
         {
             IResultadoOperacao<List<Admin>> result = await _service.Search(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            return Result(result);
         }
 
         // GET: api/Admin/5
@@ -32,7 +32,7 @@ namespace Api.Adapters_Controllers
             if (id == data.AdmId)
             {
                 IResultadoOperacao<Admin> result = await _service.GetOne(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Admin não existe");
         }
@@ -46,7 +46,7 @@ namespace Api.Adapters_Controllers
             if (id == data.AdmId)
             {
                 IResultadoOperacao<Admin> result = await _service.Edit(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Admin não existe");
         }
@@ -58,7 +58,7 @@ namespace Api.Adapters_Controllers
         public async Task<ActionResult> PostAdmin([FromBody] Admin data)
         {
             IResultadoOperacao<Admin> result = await _service.Create(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            return Result(result);
         }
 
         // DELETE: api/Admin
@@ -70,7 +70,7 @@ namespace Api.Adapters_Controllers
             if (id == data.AdmId)
             {
                 IResultadoOperacao<Admin> result = await _service.Delete(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Admin não existe");
         }
@@ -105,6 +105,11 @@ namespace Api.Adapters_Controllers
                 : BadRequest(
                 new ResultadoOperacao<string>
                 { Sucesso = false, Erro = "Token não encontrado", Link = link }));
+        }
+
+        private OkObjectResult Result(dynamic result)
+        {
+            return result.Sucesso ? Ok(result) : BadRequest(result);
         }
     }
 }

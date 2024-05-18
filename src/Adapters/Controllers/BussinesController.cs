@@ -21,7 +21,7 @@ namespace Api.Adapters_Controllers
         public async Task<ActionResult> GetBussiness([FromBody] Bussines data)
         {
             IResultadoOperacao<List<Bussines>> result = await _service.Search(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            return Result(result);
         }
 
         // GET: api/Bussines/5
@@ -33,7 +33,7 @@ namespace Api.Adapters_Controllers
             if (cnpj == data.BussCnpj)
             {
                 IResultadoOperacao<Bussines> result = await _service.GetOne(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Bussines não existe");
         }
@@ -47,7 +47,7 @@ namespace Api.Adapters_Controllers
             if (cnpj == data.BussCnpj)
             {
                 IResultadoOperacao<Bussines> result = await _service.Edit(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Bussines não existe");
         }
@@ -59,7 +59,7 @@ namespace Api.Adapters_Controllers
         public async Task<ActionResult> PostBussines([FromBody] Bussines data)
         {
             IResultadoOperacao<Bussines> result = await _service.Create(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            return Result(result);
         }
 
         // DELETE: api/Bussines
@@ -71,7 +71,7 @@ namespace Api.Adapters_Controllers
             if (cnpj == data.BussCnpj)
             {
                 IResultadoOperacao<Bussines> result = await _service.Delete(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Bussines não existe");
         }
@@ -116,7 +116,7 @@ namespace Api.Adapters_Controllers
             if (cnpj == data.BussCnpj)
             {
                 IResultadoOperacao<Bussines> result = await _service.Enable(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Bussines não existe");
         }
@@ -129,7 +129,7 @@ namespace Api.Adapters_Controllers
             if (cnpj == data.BussCnpj)
             {
                 IResultadoOperacao<Bussines> result = await _service.Disable(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Bussines não existe");
         }
@@ -142,9 +142,14 @@ namespace Api.Adapters_Controllers
             if (cnpj == data.BussCnpj)
             {
                 IResultadoOperacao<Bussines> result = await _service.AlterType(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("Bussines não existe");
+        }
+
+        private OkObjectResult Result(dynamic result)
+        {
+            return result.Sucesso ? Ok(result) : BadRequest(result);
         }
     }
 }

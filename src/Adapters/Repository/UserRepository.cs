@@ -14,7 +14,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<List<User>>> Search(User data)
         {
             ILink link = new Link
-            { Rel = "search_admin", Href = "/User", Method = "GET" };
+            { Rel = "search_user", Href = "/User", Method = "GET" };
 
             try
             {
@@ -56,28 +56,28 @@ namespace Api.Adapters_Repository
             }
             catch (DbUpdateException)
             {
-                return new ResultadoOperacao<List<User>> { Sucesso = false, Erro = "Erro ao buscar Admines", Link = link };
+                return new ResultadoOperacao<List<User>> { Sucesso = false, Erro = "Erro ao buscar Useres", Link = link };
             }
         }
 
         public async Task<IResultadoOperacao<User>> Create(User data)
         {
             ILink link = new Link
-            { Rel = "create_admin", Href = "/User", Method = "POST" };
+            { Rel = "create_user", Href = "/User", Method = "POST" };
             try
             {
                 await _context.Users.AddAsync(data);
                 await _context.SaveChangesAsync();
-                IResultadoOperacao<List<User>> admin = await Search(data);
-                return admin?.Data?.Count != 0
+                IResultadoOperacao<List<User>> user = await Search(data);
+                return user?.Data?.Count != 0
                 ? new ResultadoOperacao<User>
-                { Data = admin?.Data?[0], Sucesso = true, Link = link }
+                { Data = user?.Data?[0], Sucesso = true, Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao salvar User", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User já existe", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao salvar User", Link = link };
@@ -96,20 +96,20 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<User>> GetOne(User data)
         {
             ILink link = new Link
-            { Rel = "get_admin", Href = $"/User/{data.UserCpf}", Method = "GET" };
+            { Rel = "get_user", Href = $"/User/{data.UserCpf}", Method = "GET" };
 
             try
             {
-                User? admin = await _context.Users.FindAsync(data.UserCpf);
-                return admin is not null
+                User? user = await _context.Users.FindAsync(data.UserCpf);
+                return user is not null
                 ? new ResultadoOperacao<User>
-                { Data = admin, Sucesso = true, Link = link }
+                { Data = user, Sucesso = true, Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao buscar User", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe", Link = link };
@@ -119,7 +119,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<User>> Edit(User data)
         {
             ILink link = new Link
-            { Rel = "edit_admin", Href = "/User", Method = "PUT" };
+            { Rel = "edit_user", Href = "/User", Method = "PUT" };
             try
             {
                 User? adm = await _context.Users.FindAsync(data.UserCpf);
@@ -139,16 +139,16 @@ namespace Api.Adapters_Repository
                     }
                 }
                 await _context.SaveChangesAsync();
-                IResultadoOperacao<User>? admin = (IResultadoOperacao<User>?)await GetOne(data);
-                return admin is not null && admin.Data is not null
+                IResultadoOperacao<User>? user = (IResultadoOperacao<User>?)await GetOne(data);
+                return user is not null && user.Data is not null
                 ? new ResultadoOperacao<User>
-                { Data = admin.Data, Sucesso = true, Link = link }
+                { Data = user.Data, Sucesso = true, Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao editar User", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao editar User", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe", Link = link };
@@ -157,23 +157,23 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<User>> Delete(User data)
         {
             ILink link = new Link
-            { Rel = "edit_admin", Href = "/User", Method = "PUT" };
+            { Rel = "edit_user", Href = "/User", Method = "PUT" };
             try
             {
-                User? buscaAdmin = await _context.Users.FindAsync(data.UserCpf);
-                if (buscaAdmin == null)
+                User? buscaUser = await _context.Users.FindAsync(data.UserCpf);
+                if (buscaUser == null)
                 {
                     return new ResultadoOperacao<User>
                     { Sucesso = false, Erro = "User não existe", Link = link };
                 }
-                _context.Users.Remove(buscaAdmin);
+                _context.Users.Remove(buscaUser);
                 await _context.SaveChangesAsync();
                 return new ResultadoOperacao<User>
-                { Data = buscaAdmin, Sucesso = true, Link = link };
+                { Data = buscaUser, Sucesso = true, Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao deletar User", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe!", Link = link };
@@ -182,7 +182,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<User>> Disable(User data)
         {
             ILink link = new Link
-            { Rel = "disable_admin", Href = "/User/Disable", Method = "POST" };
+            { Rel = "disable_user", Href = "/User/Disable", Method = "POST" };
             try
             {
                 IResultadoOperacao<User> user = await GetOne(data);
@@ -194,7 +194,7 @@ namespace Api.Adapters_Repository
             }
             catch (System.Exception)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao desabilitar User", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe!", Link = link };
@@ -204,7 +204,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<User>> Enable(User data)
         {
             ILink link = new Link
-            { Rel = "disable_admin", Href = "/User/Disable", Method = "POST" };
+            { Rel = "disable_user", Href = "/User/Disable", Method = "POST" };
             try
             {
                 IResultadoOperacao<User> user = await GetOne(data);
@@ -216,7 +216,7 @@ namespace Api.Adapters_Repository
             }
             catch (System.Exception)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao desabilitar User", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe!", Link = link };
@@ -226,7 +226,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<User>> AlterType(User data)
         {
             ILink link = new Link
-            { Rel = "disable_admin", Href = "/User/Disable", Method = "POST" };
+            { Rel = "disable_user", Href = "/User/AlterType", Method = "POST" };
             try
             {
                 IResultadoOperacao<User> user = await GetOne(data);
@@ -238,14 +238,14 @@ namespace Api.Adapters_Repository
             }
             catch (System.Exception)
             {
-                return await AdminExists(data.UserCpf) ? new ResultadoOperacao<User>
+                return await UserExist(data.UserCpf) ? new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "Erro ao desabilitar User", Link = link }
                 : new ResultadoOperacao<User>
                 { Sucesso = false, Erro = "User não existe!", Link = link };
             }
         }
 
-        private async Task<bool> AdminExists(string? cpf)
+        private async Task<bool> UserExist(string? cpf)
         {
             return await _context.Users.AnyAsync(e => e.UserCpf == cpf);
         }

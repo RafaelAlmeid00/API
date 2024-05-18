@@ -47,7 +47,7 @@ namespace Api.Adapters_Controllers
             if (cpf == data.UserCpf)
             {
                 IResultadoOperacao<User> result = await _service.GetOne(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("User não existe");
         }
@@ -61,7 +61,7 @@ namespace Api.Adapters_Controllers
             if (cpf == data.UserCpf)
             {
                 IResultadoOperacao<User> result = await _service.Edit(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("User não existe");
         }
@@ -73,7 +73,7 @@ namespace Api.Adapters_Controllers
         public async Task<ActionResult> PostUser([FromBody] User data)
         {
             IResultadoOperacao<User> result = await _service.Create(data);
-            return result.Sucesso ? Ok(result) : BadRequest(result);
+            return Result(result);
         }
 
         // DELETE: api/User
@@ -85,7 +85,7 @@ namespace Api.Adapters_Controllers
             if (cpf == data.UserCpf)
             {
                 IResultadoOperacao<User> result = await _service.Delete(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("User não existe");
         }
@@ -131,7 +131,7 @@ namespace Api.Adapters_Controllers
             if (cpf == data.UserCpf)
             {
                 IResultadoOperacao<User> result = await _service.Enable(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("User não existe");
         }
@@ -144,7 +144,7 @@ namespace Api.Adapters_Controllers
             if (cpf == data.UserCpf)
             {
                 IResultadoOperacao<User> result = await _service.Disable(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("User não existe");
         }
@@ -157,9 +157,13 @@ namespace Api.Adapters_Controllers
             if (cpf == data.UserCpf)
             {
                 IResultadoOperacao<User> result = await _service.AlterType(data);
-                return result.Sucesso ? Ok(result) : BadRequest(result);
+                return Result(result);
             }
             return NotFound("User não existe");
+        }
+        private OkObjectResult Result(dynamic result)
+        {
+            return result.Sucesso ? Ok(result) : BadRequest(result);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<List<Bussines>>> Search(Bussines data)
         {
             ILink link = new Link
-            { Rel = "search_admin", Href = "/Bussines", Method = "GET" };
+            { Rel = "search_bussines", Href = "/Bussines", Method = "GET" };
 
             try
             {
@@ -56,28 +56,28 @@ namespace Api.Adapters_Repository
             }
             catch (DbUpdateException)
             {
-                return new ResultadoOperacao<List<Bussines>> { Sucesso = false, Erro = "Erro ao buscar Admines", Link = link };
+                return new ResultadoOperacao<List<Bussines>> { Sucesso = false, Erro = "Erro ao buscar Bussineses", Link = link };
             }
         }
 
         public async Task<IResultadoOperacao<Bussines>> Create(Bussines data)
         {
             ILink link = new Link
-            { Rel = "create_admin", Href = "/Bussines", Method = "POST" };
+            { Rel = "create_bussines", Href = "/Bussines", Method = "POST" };
             try
             {
                 await _context.Bussines.AddAsync(data);
                 await _context.SaveChangesAsync();
-                IResultadoOperacao<List<Bussines>> admin = await Search(data);
-                return admin?.Data?.Count != 0
+                IResultadoOperacao<List<Bussines>> bussines = await Search(data);
+                return bussines?.Data?.Count != 0
                 ? new ResultadoOperacao<Bussines>
-                { Data = admin?.Data?[0], Sucesso = true, Link = link }
+                { Data = bussines?.Data?[0], Sucesso = true, Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao salvar Bussines", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines já existe", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao salvar Bussines", Link = link };
@@ -88,20 +88,20 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<Bussines>> GetOne(Bussines data)
         {
             ILink link = new Link
-            { Rel = "get_admin", Href = $"/Bussines/{data.BussCnpj}", Method = "GET" };
+            { Rel = "get_bussines", Href = $"/Bussines/{data.BussCnpj}", Method = "GET" };
 
             try
             {
-                Bussines? admin = await _context.Bussines.FindAsync(data.BussCnpj);
-                return admin is not null
+                Bussines? bussines = await _context.Bussines.FindAsync(data.BussCnpj);
+                return bussines is not null
                 ? new ResultadoOperacao<Bussines>
-                { Data = admin, Sucesso = true, Link = link }
+                { Data = bussines, Sucesso = true, Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao buscar Bussines", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe", Link = link };
@@ -111,7 +111,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<Bussines>> Edit(Bussines data)
         {
             ILink link = new Link
-            { Rel = "edit_admin", Href = "/Bussines", Method = "PUT" };
+            { Rel = "edit_bussines", Href = "/Bussines", Method = "PUT" };
             try
             {
                 Bussines? adm = await _context.Bussines.FindAsync(data.BussCnpj);
@@ -131,16 +131,16 @@ namespace Api.Adapters_Repository
                     }
                 }
                 await _context.SaveChangesAsync();
-                IResultadoOperacao<Bussines>? admin = (IResultadoOperacao<Bussines>?)await GetOne(data);
-                return admin is not null && admin.Data is not null
+                IResultadoOperacao<Bussines>? bussines = (IResultadoOperacao<Bussines>?)await GetOne(data);
+                return bussines is not null && bussines.Data is not null
                 ? new ResultadoOperacao<Bussines>
-                { Data = admin.Data, Sucesso = true, Link = link }
+                { Data = bussines.Data, Sucesso = true, Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao editar Bussines", Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao editar Bussines", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe", Link = link };
@@ -149,23 +149,23 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<Bussines>> Delete(Bussines data)
         {
             ILink link = new Link
-            { Rel = "edit_admin", Href = "/Bussines", Method = "PUT" };
+            { Rel = "edit_bussines", Href = "/Bussines", Method = "PUT" };
             try
             {
-                Bussines? buscaAdmin = await _context.Bussines.FindAsync(data.BussCnpj);
-                if (buscaAdmin == null)
+                Bussines? buscaBussines = await _context.Bussines.FindAsync(data.BussCnpj);
+                if (buscaBussines == null)
                 {
                     return new ResultadoOperacao<Bussines>
                     { Sucesso = false, Erro = "Bussines não existe", Link = link };
                 }
-                _context.Bussines.Remove(buscaAdmin);
+                _context.Bussines.Remove(buscaBussines);
                 await _context.SaveChangesAsync();
                 return new ResultadoOperacao<Bussines>
-                { Data = buscaAdmin, Sucesso = true, Link = link };
+                { Data = buscaBussines, Sucesso = true, Link = link };
             }
             catch (DbUpdateException)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao deletar Bussines", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe!", Link = link };
@@ -174,7 +174,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<Bussines>> Disable(Bussines data)
         {
             ILink link = new Link
-            { Rel = "disable_admin", Href = "/Bussines/Disable", Method = "POST" };
+            { Rel = "disable_bussines", Href = "/Bussines/Disable", Method = "POST" };
             try
             {
                 IResultadoOperacao<Bussines> Bussines = await GetOne(data);
@@ -186,7 +186,7 @@ namespace Api.Adapters_Repository
             }
             catch (System.Exception)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao desabilitar Bussines", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe!", Link = link };
@@ -196,7 +196,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<Bussines>> Enable(Bussines data)
         {
             ILink link = new Link
-            { Rel = "disable_admin", Href = "/Bussines/Disable", Method = "POST" };
+            { Rel = "disable_bussines", Href = "/Bussines/Disable", Method = "POST" };
             try
             {
                 IResultadoOperacao<Bussines> Bussines = await GetOne(data);
@@ -208,7 +208,7 @@ namespace Api.Adapters_Repository
             }
             catch (System.Exception)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao desabilitar Bussines", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe!", Link = link };
@@ -218,7 +218,7 @@ namespace Api.Adapters_Repository
         public async Task<IResultadoOperacao<Bussines>> AlterType(Bussines data)
         {
             ILink link = new Link
-            { Rel = "disable_admin", Href = "/Bussines/Disable", Method = "POST" };
+            { Rel = "disable_bussines", Href = "/Bussines/Disable", Method = "POST" };
             try
             {
                 IResultadoOperacao<Bussines> Bussines = await GetOne(data);
@@ -230,14 +230,14 @@ namespace Api.Adapters_Repository
             }
             catch (System.Exception)
             {
-                return await AdminExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
+                return await BussinesExists(data.BussCnpj) ? new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Erro ao desabilitar Bussines", Link = link }
                 : new ResultadoOperacao<Bussines>
                 { Sucesso = false, Erro = "Bussines não existe!", Link = link };
             }
         }
 
-        private async Task<bool> AdminExists(string? cpf)
+        private async Task<bool> BussinesExists(string? cpf)
         {
             return await _context.Bussines.AnyAsync(e => e.BussCnpj == cpf);
         }

@@ -341,9 +341,13 @@ public partial class EasyPassContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("bussines_buss_CNPJ");
             entity.Property(e => e.ListTipo)
-                .HasMaxLength(1)
+                .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("list_tipo");
+            entity.Property(e => e.ListCPF)
+                .HasMaxLength(11)
+                .IsUnicode(false)
+                .HasColumnName("list_cpf");
 
             entity.HasOne(d => d.BussinesBussCnpjNavigation).WithMany(p => p.ListCpfs)
                 .HasForeignKey(d => d.BussinesBussCnpj)

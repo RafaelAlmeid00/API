@@ -13,7 +13,7 @@ namespace Api.Services
 
         public async Task<IResultadoOperacao<Admin>> Create(Admin data)
         {
-            ILink link = new Link { Rel = "create_admin", Href = "/Admin/Login", Method = "POST" };
+            ILink link = new Link { Rel = "create_admin", Href = "/Admin/Create", Method = "POST" };
 
             if (!string.IsNullOrEmpty(data.AdmSenha))
             {

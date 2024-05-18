@@ -35,5 +35,8 @@ namespace Api.Interface
     public interface IRepositoryBussines : IBaseRepository<Bussines>, IDeleteEditRepository<Bussines>, IDisableEnableRepository<Bussines>, IAlterTypeRepository<Bussines>
     {
     }
-
+    public interface IRepositoryListCpf : IBaseRepository<ListCpf>, IDeleteEditRepository<ListCpf>, IAlterTypeRepository<ListCpf>
+    {
+        Task<IResultadoOperacao<dynamic>> CreateWithExcel((List<dynamic>, List<dynamic>) data);
+    }
 }
