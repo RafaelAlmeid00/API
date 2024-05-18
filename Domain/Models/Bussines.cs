@@ -4,7 +4,7 @@ using Api.Interface;
 
 namespace Api.Domain;
 
-public partial class Bussines : IBussinesDTO
+public record Bussines : IBussinesDTO
 {
     public string? BussCnpj { get; set; }
 
@@ -39,7 +39,7 @@ public partial class Bussines : IBussinesDTO
     public virtual ICollection<ListCpf>? ListCpfs { get; set; } = [];
 }
 
-public partial class BussinesLogin : IBussinesLoginDTO
+public record BussinesLogin : IBussinesLoginDTO
 {
     [Key]
     [MaxLength(14)]

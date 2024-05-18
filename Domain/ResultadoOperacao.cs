@@ -2,7 +2,7 @@ using Api.Interface;
 
 namespace Api.Domain
 {
-    public class ResultadoOperacao<T> : IResultadoOperacao<T>
+    public record ResultadoOperacao<T> : IResultadoOperacao<T>
     {
         public bool Sucesso { get; set; }
         public string? Erro { get; set; }
@@ -13,7 +13,7 @@ namespace Api.Domain
 
     // separar camadas
 
-    public class Link : ILink
+    public record Link : ILink
     {        
         public required string Rel { get; set; }
         public required string Href { get; set; }

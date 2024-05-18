@@ -6,7 +6,7 @@ using Api.Interface;
 
 namespace Api.Domain;
 
-public partial class User : IUserDTO
+public record User : IUserDTO
 {
     [Key]
     [MinLength(11, ErrorMessage = "CPF não pode ter menos que 11 dígitos")]
@@ -46,7 +46,7 @@ public partial class User : IUserDTO
     public virtual ICollection<Sac> Sacs { get; set; } = [];
 }
 
-public class UserLogin : IUserLoginDTO
+public record UserLogin : IUserLoginDTO
 {
     [Key]
     [MaxLength(11, ErrorMessage = "CPF não pode ter mais que 11 dígitos")]

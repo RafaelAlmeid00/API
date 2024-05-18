@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class Card
+public record Card
 {
     public int CardId { get; set; }
 

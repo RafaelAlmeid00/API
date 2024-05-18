@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class BusRoute
+public record BusRoute
 {
     public string RouteNum { get; set; } = null!;
 

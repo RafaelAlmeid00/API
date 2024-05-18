@@ -7,7 +7,7 @@ using Api.Interface;
 
 namespace Api.Domain;
 
-public partial class Admin : IAdminDTO
+public record Admin : IAdminDTO
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -26,7 +26,7 @@ public partial class Admin : IAdminDTO
     }
 }
 
-public class AdminLogin : IAdminLoginDTO
+public record AdminLogin : IAdminLoginDTO
 {
     [EmailAddress]
     [Required(ErrorMessage = "Insira um Email")]

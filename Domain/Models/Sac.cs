@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class Sac
+public record Sac
 {
     public string SacTicket { get; set; } = null!;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class ValidationCard
+public record ValidationCard
 {
     public int ValId { get; set; }
 

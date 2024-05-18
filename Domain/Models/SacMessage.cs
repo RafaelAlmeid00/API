@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class SacMessage
+public record SacMessage
 {
     public int SacmenId { get; set; }
 

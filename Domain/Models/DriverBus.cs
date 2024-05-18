@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class DriverBus
+public record DriverBus
 {
     public string DriverCpf { get; set; } = null!;
 

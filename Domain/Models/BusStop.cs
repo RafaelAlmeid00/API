@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Api.Domain;
 
-public partial class BusStop
+public record BusStop
 {
     public int StopId { get; set; }
 
