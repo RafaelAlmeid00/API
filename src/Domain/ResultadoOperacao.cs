@@ -11,8 +11,6 @@ namespace Api.Domain
 
     }
 
-    // separar camadas
-
     public record Link : ILink
     {        
         public required string Rel { get; set; }

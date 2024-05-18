@@ -3,12 +3,12 @@ using Api.Interface;
 
 namespace Api.Services
 {
-    public class ServiceBussines(IRepositoryBussines Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceBussines
+    public class ServiceBussines(IRepositoryBussines Repository, ICnpjValidator validator, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceBussines
     {
         private readonly IRepositoryBussines _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
         private readonly IAuth _Auth = Auth;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly ICnpjValidator _Validator = validator;
 
         public async Task<IResultadoOperacao<Bussines>> AlterType(Bussines data)
         {
@@ -21,9 +21,14 @@ namespace Api.Services
 
             if (!string.IsNullOrEmpty(data.BussSenha))
             {
-                string hash = _Crypto.Encrypt(data.BussSenha);
-                data.BussSenha = hash;
-                return await _Repository.Create(data);
+                if (_Validator.ValidateCNPJ(data.BussCnpj))
+                {
+                    string hash = _Crypto.Encrypt(data.BussSenha);
+                    data.BussSenha = hash;
+                    return await _Repository.Create(data);
+                }
+                return new ResultadoOperacao<Bussines>
+                { Sucesso = false, Erro = "CNPJ inválido", Link = link };
             }
             return new ResultadoOperacao<Bussines>
             { Sucesso = false, Erro = "Senha inválida", Link = link };
@@ -41,6 +46,14 @@ namespace Api.Services
 
         public async Task<IResultadoOperacao<Bussines>> Edit(Bussines data)
         {
+            ILink link = new Link
+            { Rel = "edit_bussines", Href = "/Bussines", Method = "PUT" };
+
+            if (!string.IsNullOrEmpty(data.BussCnpj) && !_Validator.ValidateCNPJ(data.BussCnpj))
+            {
+                return new ResultadoOperacao<Bussines>
+                { Sucesso = false, Erro = "CNPJ inválido", Link = link };
+            }
             if (!string.IsNullOrEmpty(data.BussSenha))
             {
                 string hash = _Crypto.Encrypt(data.BussSenha);

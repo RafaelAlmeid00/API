@@ -75,7 +75,7 @@ namespace Api.Adapters_Repository
             List<dynamic> itensSaved = [];
             List<dynamic> result =
             [
-                new { save = itensSaved, valids = data.Item1, invalids = data.Item2 }
+                new { saved = itensSaved, valids = data.Item1, invalids = data.Item2 }
             ];
 
             try

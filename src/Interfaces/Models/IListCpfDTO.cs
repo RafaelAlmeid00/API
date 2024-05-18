@@ -1,6 +1,6 @@
 using Api.Domain;
 
-public interface IListCpf
+public interface IListCpfDTO
 {
     int? ListId { get; set; }
 

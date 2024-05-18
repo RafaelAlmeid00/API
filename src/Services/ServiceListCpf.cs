@@ -7,6 +7,7 @@ namespace Api.Services
     public class ServiceListCpf(IRepositoryListCpf Repository, IListCPFValidator validator) : IServiceListCpf
     {
         private readonly IRepositoryListCpf _Repository = Repository;
+        private readonly IListCPFValidator _Validator = validator;
 
         public async Task<IResultadoOperacao<ListCpf>> Create(ListCpf data)
         {
@@ -14,7 +15,7 @@ namespace Api.Services
         }
         public async Task<IResultadoOperacao<dynamic>> CreateWithExcel(IFormFile data)
         {
-            (List<dynamic>, List<dynamic>) excel = await validator.ValidateAll(data);
+            (List<dynamic>, List<dynamic>) excel = await _Validator.ValidateAll(data);
             return await _Repository.CreateWithExcel(excel);
         }
         public async Task<IResultadoOperacao<ListCpf>> Delete(ListCpf data)

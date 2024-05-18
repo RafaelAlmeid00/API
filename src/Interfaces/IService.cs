@@ -47,4 +47,7 @@ namespace Api.Interface
         Task<IResultadoOperacao<dynamic>> CreateWithExcel(IFormFile data);
     }
 
+    public interface IServiceBusStop : IBaseService<BusStop>, IDeleteEditService<BusStop>, IAlterTypeService<BusStop>, IDisableEnableService<BusStop>
+    {
+    }
 }

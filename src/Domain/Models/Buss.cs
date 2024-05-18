@@ -1,31 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Api.Domain;
 
 public record Buss
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int BusId { get; set; }
-
-    public string BusNome { get; set; } = null!;
-
-    public string BusPlaca { get; set; } = null!;
-
-    public string BusFabricacao { get; set; } = null!;
-
-    public string BusStatus { get; set; } = null!;
-
-    public string BusModelo { get; set; } = null!;
-
+    public string? BusNome { get; set; }
+    public string? BusPlaca { get; set; }
+    public string? BusFabricacao { get; set; }
+    public string? BusStatus { get; set; }
+    public string? BusModelo { get; set; }
     public decimal BusTarifa { get; set; }
-
-    public string BussinesBussCnpj { get; set; } = null!;
-
-    public string BusRouteRouteNum { get; set; } = null!;
-
-    public virtual BusRoute BusRouteRouteNumNavigation { get; set; } = null!;
-
-    public virtual Bussines BussinesBussCnpjNavigation { get; set; } = null!;
-
-    public virtual ICollection<TurnBus> TurnBus { get; set; } = [];
+    [ForeignKey("Bussines")]
+    public string? BussinesBussCnpj { get; set; }
+    public string? BusRouteRouteNum { get; set; }
+    public virtual BusRoute? BusRouteRouteNumNavigation { get; set; }
+    public virtual Bussines? BussinesBussCnpjNavigation { get; set; }
+    public virtual ICollection<TurnBus>? TurnBus { get; set; }
 }

@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Api.Services
 {
-    public class ServiceUser(IRepositoryUser Repository, ICrypto Crypto, IAuth Auth) : IServiceUser
+    public class ServiceUser(IRepositoryUser Repository, ICrypto Crypto, IAuth Auth, ICpfValidator validator) : IServiceUser
     {
         private readonly IRepositoryUser _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
         private readonly IAuth _Auth = Auth;
+        private readonly ICpfValidator _Validator = validator;
+
 
         public async Task<IResultadoOperacao<User>> AlterType(User data)
         {
@@ -21,9 +23,14 @@ namespace Api.Services
 
             if (!string.IsNullOrEmpty(data.UserSenha))
             {
-                string hash = _Crypto.Encrypt(data.UserSenha);
-                data.UserSenha = hash;
-                return await _Repository.Create(data);
+                if (_Validator.ValidateCPF(data.UserCpf))
+                {
+                    string hash = _Crypto.Encrypt(data.UserSenha);
+                    data.UserSenha = hash;
+                    return await _Repository.Create(data);
+                }
+                return new ResultadoOperacao<User>
+                { Sucesso = false, Erro = "CPF inválido", Link = link };
             }
             return new ResultadoOperacao<User>
             { Sucesso = false, Erro = "Senha inválida", Link = link };
@@ -41,6 +48,14 @@ namespace Api.Services
 
         public async Task<IResultadoOperacao<User>> Edit(User data)
         {
+            ILink link = new Link
+            { Rel = "edit_user", Href = "/User", Method = "PUT" };
+
+            if (!string.IsNullOrEmpty(data.UserCpf) && !_Validator.ValidateCPF(data.UserCpf))
+            {
+                return new ResultadoOperacao<User>
+                { Sucesso = false, Erro = "CPF inválido", Link = link };
+            }
             if (!string.IsNullOrEmpty(data.UserSenha))
             {
                 string hash = _Crypto.Encrypt(data.UserSenha);

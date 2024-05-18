@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Api.Domain;
 
-public record ListCpf : IListCpf
+public record ListCpf : IListCpfDTO
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
