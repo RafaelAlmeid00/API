@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Adapters_Repository
 {
 
-    public class BussinesRepository(EasyPassContext context) : IRepositoryBussines<Bussines>
+    public class BussinesRepository(EasyPassContext context) : IRepositoryBussines
     {
         private readonly EasyPassContext _context = context;
 

@@ -70,12 +70,12 @@ builder.Services.AddScoped<IUserLoginDTO, UserLogin>();
 builder.Services.AddScoped<IAdminLoginDTO, AdminLogin>();
 builder.Services.AddScoped<IBussinesDTO, Bussines>();
 builder.Services.AddScoped<IBussinesLoginDTO, BussinesLogin>();
-builder.Services.AddScoped<IRepositoryAdmin<Admin>, AdminRepository>();
-builder.Services.AddScoped<IRepositoryUser<User>, UserRepository>();
-builder.Services.AddScoped<IRepositoryBussines<Bussines>, BussinesRepository>();
-builder.Services.AddScoped<IServiceAdmin<Admin>, ServiceAdmin>();
-builder.Services.AddScoped<IServiceUser<User>, ServiceUser>();
-builder.Services.AddScoped<IServiceBussines<Bussines>, ServiceBussines>();
+builder.Services.AddScoped<IRepositoryAdmin, AdminRepository>();
+builder.Services.AddScoped<IRepositoryUser, UserRepository>();
+builder.Services.AddScoped<IRepositoryBussines, BussinesRepository>();
+builder.Services.AddScoped<IServiceAdmin, ServiceAdmin>();
+builder.Services.AddScoped<IServiceUser, ServiceUser>();
+builder.Services.AddScoped<IServiceBussines, ServiceBussines>();
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<ICrypto, Crypto>();
 

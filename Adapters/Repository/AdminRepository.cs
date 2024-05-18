@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Adapters_Repository
 {
 
-    public class AdminRepository(EasyPassContext context) : IRepositoryAdmin<Admin>
+    public class AdminRepository(EasyPassContext context) : IRepositoryAdmin
     {
         private readonly EasyPassContext _context = context;
 

@@ -9,9 +9,9 @@ namespace Api.Adapters_Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class BussinesController(IServiceBussines<Bussines> service, IAntiforgery antiforgery) : ControllerBase
+    public class BussinesController(IServiceBussines service, IAntiforgery antiforgery) : ControllerBase
     {
-        private readonly IServiceBussines<Bussines> _service = service;
+        private readonly IServiceBussines _service = service;
         private readonly IAntiforgery _antiforgery = antiforgery;
 
         // GET: api/Bussines

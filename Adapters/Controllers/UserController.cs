@@ -9,9 +9,9 @@ namespace Api.Adapters_Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IServiceUser<User> service, IAntiforgery antiforgery) : ControllerBase
+    public class UserController(IServiceUser service, IAntiforgery antiforgery) : ControllerBase
     {
-        private readonly IServiceUser<User> _service = service;
+        private readonly IServiceUser _service = service;
         private readonly IAntiforgery _antiforgery = antiforgery;
 
         // GET: api/User

@@ -31,15 +31,15 @@ namespace Api.Interface
         Task<IResultadoOperacao<object>> Login(T data);
     }
 
-    public interface IServiceAdmin<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IAdminLoginDTO>
+    public interface IServiceAdmin : IBaseService<Admin>, IDeleteEditService<Admin>, ILoginLogoutService<IAdminLoginDTO>
     {
     }
 
-    public interface IServiceUser<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IUserLoginDTO>, IAlterTypeService<T>, IDisableEnableService<T>
+    public interface IServiceUser : IBaseService<User>, IDeleteEditService<User>, ILoginLogoutService<IUserLoginDTO>, IAlterTypeService<User>, IDisableEnableService<User>
     {
     }
 
-    public interface IServiceBussines<T> : IBaseService<T>, IDeleteEditService<T>, ILoginLogoutService<IBussinesLoginDTO>, IAlterTypeService<T>, IDisableEnableService<T>
+    public interface IServiceBussines : IBaseService<Bussines>, IDeleteEditService<Bussines>, ILoginLogoutService<IBussinesLoginDTO>, IAlterTypeService<Bussines>, IDisableEnableService<Bussines>
     {
     }
 

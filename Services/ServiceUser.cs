@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Api.Services
 {
-    public class ServiceUser(IRepositoryUser<User> Repository, ICrypto Crypto, IAuth Auth) : IServiceUser<User>
+    public class ServiceUser(IRepositoryUser Repository, ICrypto Crypto, IAuth Auth) : IServiceUser
     {
-        private readonly IRepositoryUser<User> _Repository = Repository;
+        private readonly IRepositoryUser _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
         private readonly IAuth _Auth = Auth;
 

@@ -24,20 +24,15 @@ namespace Api.Interface
         Task<IResultadoOperacao<T>> Enable(T data);
     }
 
-    public interface ILoginLogoutRepository<T>
-    {
-        Task<IResultadoOperacao<T>> Login(T data);
-        Task<IResultadoOperacao<T>> Logout(T data);
-    }
 
-    public interface IRepositoryAdmin<T> : IBaseRepository<T>, IDeleteEditRepository<T>
+    public interface IRepositoryAdmin : IBaseRepository<Admin>, IDeleteEditRepository<Admin>
     {
     }
-    public interface IRepositoryUser<T> : IBaseRepository<T>, IDeleteEditRepository<T>, IDisableEnableRepository<T>, IAlterTypeRepository<T>
+    public interface IRepositoryUser : IBaseRepository<User>, IDeleteEditRepository<User>, IDisableEnableRepository<User>, IAlterTypeRepository<User>
     {
     }
 
-    public interface IRepositoryBussines<T> : IBaseRepository<T>, IDeleteEditRepository<T>, IDisableEnableRepository<T>, IAlterTypeRepository<T>
+    public interface IRepositoryBussines : IBaseRepository<Bussines>, IDeleteEditRepository<Bussines>, IDisableEnableRepository<Bussines>, IAlterTypeRepository<Bussines>
     {
     }
 

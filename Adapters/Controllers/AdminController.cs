@@ -8,9 +8,9 @@ namespace Api.Adapters_Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController(IServiceAdmin<Admin> service, IAntiforgery antiforgery) : ControllerBase
+    public class AdminController(IServiceAdmin service, IAntiforgery antiforgery) : ControllerBase
     {
-        private readonly IServiceAdmin<Admin> _service = service;
+        private readonly IServiceAdmin _service = service;
         private readonly IAntiforgery _antiforgery = antiforgery;
 
         // GET: api/Admin

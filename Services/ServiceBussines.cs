@@ -3,9 +3,9 @@ using Api.Interface;
 
 namespace Api.Services
 {
-    public class ServiceBussines(IRepositoryBussines<Bussines> Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceBussines<Bussines>
+    public class ServiceBussines(IRepositoryBussines Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceBussines
     {
-        private readonly IRepositoryBussines<Bussines> _Repository = Repository;
+        private readonly IRepositoryBussines _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
         private readonly IAuth _Auth = Auth;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;

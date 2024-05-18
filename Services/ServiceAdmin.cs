@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Api.Services
 {
-    public class ServiceAdmin(IRepositoryAdmin<Admin> Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceAdmin<Admin>
+    public class ServiceAdmin(IRepositoryAdmin Repository, ICrypto Crypto, IAuth Auth, IHttpContextAccessor httpContextAccessor) : IServiceAdmin
     {
-        private readonly IRepositoryAdmin<Admin> _Repository = Repository;
+        private readonly IRepositoryAdmin _Repository = Repository;
         private readonly ICrypto _Crypto = Crypto;
         private readonly IAuth _Auth = Auth;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
