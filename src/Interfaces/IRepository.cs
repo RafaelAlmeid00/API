@@ -39,6 +39,12 @@ namespace Api.Interface
     {
         Task<IResultadoOperacao<dynamic>> CreateWithExcel((List<dynamic>, List<dynamic>) data);
     }
+    
+    public interface IRepositoryCard : IBaseRepository<Card>, IDeleteEditRepository<Card>, IAlterTypeRepository<Card>
+    {
+        Task<IResultadoOperacao<dynamic>> CreateWithExcel((List<dynamic>, List<dynamic>) data);
+    }
+    
     public interface IRepositoryBusStop : IBaseRepository<BusStop>, IDeleteEditRepository<BusStop>, IAlterTypeRepository<BusStop>, IDisableEnableRepository<BusStop>
     {
     }
