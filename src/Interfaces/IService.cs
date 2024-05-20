@@ -42,6 +42,12 @@ namespace Api.Interface
     public interface IServiceBussines : IBaseService<Bussines>, IDeleteEditService<Bussines>, ILoginLogoutService<IBussinesLoginDTO>, IAlterTypeService<Bussines>, IDisableEnableService<Bussines>
     {
     }
+    
+    public interface IServiceCard : IBaseService<Card>, IDeleteEditService<Card>, IAlterTypeService<Card>
+    {
+        Task<IResultadoOperacao<dynamic>> CreateWithExcel(IFormFile data);
+    }
+    
     public interface IServiceListCpf : IBaseService<ListCpf>, IDeleteEditService<ListCpf>, IAlterTypeService<ListCpf>
     {
         Task<IResultadoOperacao<dynamic>> CreateWithExcel(IFormFile data);
