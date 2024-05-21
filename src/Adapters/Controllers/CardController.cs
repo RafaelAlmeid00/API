@@ -31,7 +31,7 @@ namespace Api.Adapters_Controllers
             return Result(result);
         }
 
-        // GET: api/Card/5
+        // GET: api/Card
         [Authorize]
         [RequireAntiforgeryToken]
         [HttpGet("{id}")]
@@ -45,7 +45,7 @@ namespace Api.Adapters_Controllers
             return NotFound("Card não existe");
         }
 
-        // PUT: api/Card/5
+        // PUT: api/Card
         [Authorize]
         [RequireAntiforgeryToken]
         [HttpPut("{id}")]
@@ -69,7 +69,7 @@ namespace Api.Adapters_Controllers
             return Result(result);
         }
 
-        // DELETE: api/Card/5
+        // DELETE: api/Card
         [Authorize]
         [RequireAntiforgeryToken]
         [HttpDelete("{id}")]
@@ -83,7 +83,7 @@ namespace Api.Adapters_Controllers
             return NotFound("Card não existe");
         }
 
-        // PATCH: api/Card/AlterType/5
+        // PATCH: api/Card/AlterType
         [Authorize]
         [RequireAntiforgeryToken]
         [HttpPatch("AlterType/{id}")]

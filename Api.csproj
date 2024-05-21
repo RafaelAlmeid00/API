@@ -30,4 +30,10 @@
     <Using Include="BCrypt.Net.BCrypt" Static="True" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="src\Interfaces\Models\BusDTO.cs">
+      <DependentUpon>IBussStopDTO.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
