@@ -3,6 +3,7 @@ using Api.Infrastructure;
 using Api.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Api.Domain.Results;
 
 namespace Api.Adapters_Repository;
 
