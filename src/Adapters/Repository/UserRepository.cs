@@ -1,5 +1,6 @@
 
 using Api.Domain;
+using Api.Domain.Results;
 using Api.Infrastructure;
 using Api.Interface;
 using Microsoft.EntityFrameworkCore;

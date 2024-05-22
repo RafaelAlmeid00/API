@@ -1,4 +1,5 @@
 using Api.Domain;
+using Api.Domain.Results;
 using Api.Interface;
 
 namespace Api.Services

@@ -9,11 +9,4 @@ namespace Api.Interface
         bool Sucesso { get; set; }
         ILink Link { get; set; }
     }
-
-    public interface ILink
-    {
-        string Rel { get; set; }
-        string Href { get; set; }
-        string Method { get; set; }
-    }
 }

@@ -31,9 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="src\Interfaces\Models\BusDTO.cs">
-      <DependentUpon>IBussStopDTO.cs</DependentUpon>
-    </Compile>
+    <Folder Include="src\Infrastructure\" />
   </ItemGroup>
 
 </Project>
