@@ -22,7 +22,6 @@ namespace Api.Services
 
         public async Task<IResultadoOperacao<dynamic>> CreateWithExcel(IFormFile data)
         {
-            // Assuming the repository handles the validation of the excel data
             (List<dynamic>, List<dynamic>) excelData = await ParseExcelFile(data);
             return await _repository.CreateWithExcel(excelData);
         }
