@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Api.Domain;
+using Api.Domain.Results;
 using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Antiforgery;
@@ -24,18 +25,6 @@ namespace Api.Adapters_Controllers
             return result.Sucesso ? Ok(result) : BadRequest(result);
         }
         
-        // GET: api/User/GeneratePDF
-        // [Authorize]
-        // [RequireAntiforgeryToken]
-        // [HttpGet("GeneratePDF")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // public async Task<IActionResult> GeneratePDF([FromBody] User data)
-        // {
-        //     var userData = await _service.GetUserPDFData(data);
-        //     var pdfBytes = GeneratePDFUsingReportBuilder(userData);
-        //     return File(pdfBytes);
-        // }
 
 
         // GET: api/User/5

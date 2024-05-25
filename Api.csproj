@@ -30,4 +30,8 @@
     <Using Include="BCrypt.Net.BCrypt" Static="True" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="src\Infrastructure\" />
+  </ItemGroup>
+
 </Project>

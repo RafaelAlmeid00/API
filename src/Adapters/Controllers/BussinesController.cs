@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Api.Domain;
+using Api.Domain.Results;
 using Api.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Antiforgery;

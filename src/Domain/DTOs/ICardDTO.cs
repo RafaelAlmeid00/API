@@ -2,7 +2,7 @@ using Api.Domain;
 
 namespace Api.Interface;
 
-public interface ICard
+public interface ICardDTO
 {
     public int CardId { get; set; }
 

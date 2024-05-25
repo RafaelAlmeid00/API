@@ -1,4 +1,4 @@
-using System.Text;
+ using System.Text;
 using Api.Adapters_Repository;
 using Api.Domain;
 using Api.Infrastructure;
@@ -10,14 +10,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SnapObjects.Data.AspNetCore;
 
-DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
+DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: true));
 
 var builder = WebApplication.CreateBuilder(args);
 var _envVariables = DotEnv.Read();
 
 builder.Services.AddDbContext<EasyPassContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(_envVariables["connectionString"])));
-
 
 builder.Services.AddAntiforgery(options =>
 {
@@ -85,14 +84,14 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 app.UseSession();
 app.Use(async (ctx, next) =>
-        {
-            string tokensCSRF = ctx.Request.Cookies["CSRF-TOKEN"];
-            if (string.IsNullOrEmpty(tokensCSRF) == false)
-            {
-                ctx.Request.Headers["X-CSRF-TOKEN"] = tokensCSRF;
-            }
-            await next();
-        });
+{
+    string tokensCSRF = ctx.Request.Cookies["CSRF-TOKEN"];
+    if (!string.IsNullOrEmpty(tokensCSRF))
+    {
+        ctx.Request.Headers["X-CSRF-TOKEN"] = tokensCSRF;
+    }
+    await next();
+});
 
 if (app.Environment.IsDevelopment())
 {
