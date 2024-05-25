@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Api.Interface;
 
 namespace Api.Domain;
 
-public record Card
+public record Card : ICardDTO
 {
     public int CardId { get; set; }
 

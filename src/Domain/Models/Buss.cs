@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Api.Interface;
 
 namespace Api.Domain;
 
-public record Buss
+public record Buss : IBussDTO
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -7,18 +7,13 @@ using Api.Domain.Results;
 
 namespace Api.Adapters_Repository;
 
-public class CardRepository : IRepositoryCard
+public class CardRepository(EasyPassContext context) : IRepositoryCard
 {
-    private readonly EasyPassContext _context;
-
-    public CardRepository(EasyPassContext context)
-    {
-        _context = context;
-    }
+    private readonly EasyPassContext _context = context;
 
     // Podemos adicionar um card number público pra não tem que adicionar o Id pra verificação
     // e depois substituir os cardTipo por CardNumber por exemplo
-    
+
     public async Task<IResultadoOperacao<List<Card>>> Search(Card data)
     {
         ILink link = new Link { Rel = "search_card", Href = "/Card", Method = "GET" };
