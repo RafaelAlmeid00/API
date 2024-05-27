@@ -25,6 +25,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SnapObjects.Data" Version="4.2.2" />
     <PackageReference Include="SnapObjects.Data.AspNetCore" Version="4.2.2" />
+    <PackageReference Include="Stripe.net" Version="44.10.0-beta.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
     <Using Include="BCrypt.Net.BCrypt" Static="True" />
