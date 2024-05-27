@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SnapObjects.Data.AspNetCore;
+using Stripe;
+using StripeWebApiExample.Services;
 
 DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: true));
 
@@ -77,6 +79,16 @@ builder.Services.AddScoped<IServiceUser, ServiceUser>();
 builder.Services.AddScoped<IServiceBussines, ServiceBussines>();
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<ICrypto, Crypto>();
+
+// Stripe injections
+
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<ChargeService>();
+builder.Services.AddScoped<IStripeService, StripeService>();
+
+
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeOptions:SecretKey");
 
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();
