@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Api.Interface;
 
+
 namespace Api.Domain;
 
 public record User : IUserDTO
@@ -38,7 +39,6 @@ public record User : IUserDTO
     public int? ListCpfListId { get; set; }
     public virtual ListCpf? ListCpfList { get; set; }
     public string? UserStatus { get; set; }
-
     public virtual ICollection<RequestCard> RequestCards { get; set; } = [];
 
     public virtual ICollection<SacMessage> SacMessages { get; set; } = [];
